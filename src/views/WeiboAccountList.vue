@@ -57,124 +57,124 @@
   </el-main>
 </template>
 
-  <script>
-    import { mapState, mapActions } from 'vuex';
-    export default({
-      computed: mapState({
-        list: state => state.Weibo.accountList
-      }),
-      created() {
-        this.$store.dispatch('Weibo/getAccountList');
-      },
-      methods: {
-        ...mapActions([
-            'Weibo/getAccountList',
-        ]),
-        handleDelete(index, row) {
-            this.$confirm('此操作将永久删除该配置, 是否继续?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-                this.$store.dispatch('Weibo/deleteAccount', {'id':row['id'], 'params':{}}).then(res => {
-                    if (res.data && res.data['success']) {
-                        this.dialogFormVisible = false;
-                        this.$store.dispatch('Weibo/getAccountList');
-                        this.$message({
-                            type: 'success',
-                            message: '删除成功!'
-                        });
-                    } else {
-                        this.$message({
-                            type: 'error',
-                            message: '删除失败，' + res.data['msg'],
-                        });
-                    }
-                });
-            }).catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消删除'
-              });          
-            });
-        },
-        handleInsert() {
-            this.form = {}
-            this.dialogFormVisible = true;
-        },
-        handleEdit(index,row) {
-            this.form = this.genPostParams(row);
-            this.dialogFormVisible = true;
-        },
-        handelPushForm() {
-            this.$refs['dialogForm'].validate((valid) => {
-                if (!valid) {
-                    return false;
-                } else {
-                    if (this.form['id']) {
-                        this.$store.dispatch('Weibo/updateAccount', {'id':this.form['id'], 'params':this.form}).then(res => {
-                            if (res.data && res.data['success']) {
-                                this.dialogFormVisible = false;
-                                this.$store.dispatch('Weibo/getAccountList');
-                                this.$message({
-                                    type: 'success',
-                                    message: '提交成功!'
-                                });
-                            } else {
-                                this.$message({
-                                    type: 'error',
-                                    message: '提交失败，' + res.data['msg'],
-                                });
-                            }
-                        });
-                    } else {
-                        this.$store.dispatch('Weibo/insertAccount', this.form).then(res => {
-                            if (res.data && res.data['success']) {
-                                this.dialogFormVisible = false;
-                                this.$store.dispatch('Weibo/getAccountList');
-                                this.$message({
-                                    type: 'success',
-                                    message: '提交成功!'
-                                });
-                            } else {
-                                this.$message({
-                                    type: 'error',
-                                    message: '提交失败，' + res.data['msg'],
-                                });
-                            }
-                        });
-                    }
-                }
-            });
-        },
-        genPostParams(row) {
-            var params = {
-                'id':row['id'],
-                'name':row['name'],
-                'uid':row['uid'],
-            };
-            return params;
-        }
-      },
-      data() {
-        return {
-            dialogFormVisible: false,
-            form: {
-              id: 0,
-              name: '',
-              uid: '',
-            },
-            formLabelWidth: '120px',
-            rules: {
-              name: [
-                { required: true, message: '请输入名称', trigger: 'blur' },
-              ],
-              uid: [
-                { required: true, message: '请输入uid', trigger: 'blur' },
-              ],
-            },
-        }
-      }
-    });
+<!--  <script>-->
+<!--    import { mapState, mapActions } from 'vuex';-->
+<!--    export default({-->
+<!--      computed: mapState({-->
+<!--        list: state => state.Weibo.accountList-->
+<!--      }),-->
+<!--      created() {-->
+<!--        this.$store.dispatch('Weibo/getAccountList');-->
+<!--      },-->
+<!--      methods: {-->
+<!--        ...mapActions([-->
+<!--            'Weibo/getAccountList',-->
+<!--        ]),-->
+<!--        handleDelete(index, row) {-->
+<!--            this.$confirm('此操作将永久删除该配置, 是否继续?', '提示', {-->
+<!--              confirmButtonText: '确定',-->
+<!--              cancelButtonText: '取消',-->
+<!--              type: 'warning'-->
+<!--            }).then(() => {-->
+<!--                this.$store.dispatch('Weibo/deleteAccount', {'id':row['id'], 'params':{}}).then(res => {-->
+<!--                    if (res.data && res.data['success']) {-->
+<!--                        this.dialogFormVisible = false;-->
+<!--                        this.$store.dispatch('Weibo/getAccountList');-->
+<!--                        this.$message({-->
+<!--                            type: 'success',-->
+<!--                            message: '删除成功!'-->
+<!--                        });-->
+<!--                    } else {-->
+<!--                        this.$message({-->
+<!--                            type: 'error',-->
+<!--                            message: '删除失败，' + res.data['msg'],-->
+<!--                        });-->
+<!--                    }-->
+<!--                });-->
+<!--            }).catch(() => {-->
+<!--              this.$message({-->
+<!--                type: 'info',-->
+<!--                message: '已取消删除'-->
+<!--              });          -->
+<!--            });-->
+<!--        },-->
+<!--        handleInsert() {-->
+<!--            this.form = {}-->
+<!--            this.dialogFormVisible = true;-->
+<!--        },-->
+<!--        handleEdit(index,row) {-->
+<!--            this.form = this.genPostParams(row);-->
+<!--            this.dialogFormVisible = true;-->
+<!--        },-->
+<!--        handelPushForm() {-->
+<!--            this.$refs['dialogForm'].validate((valid) => {-->
+<!--                if (!valid) {-->
+<!--                    return false;-->
+<!--                } else {-->
+<!--                    if (this.form['id']) {-->
+<!--                        this.$store.dispatch('Weibo/updateAccount', {'id':this.form['id'], 'params':this.form}).then(res => {-->
+<!--                            if (res.data && res.data['success']) {-->
+<!--                                this.dialogFormVisible = false;-->
+<!--                                this.$store.dispatch('Weibo/getAccountList');-->
+<!--                                this.$message({-->
+<!--                                    type: 'success',-->
+<!--                                    message: '提交成功!'-->
+<!--                                });-->
+<!--                            } else {-->
+<!--                                this.$message({-->
+<!--                                    type: 'error',-->
+<!--                                    message: '提交失败，' + res.data['msg'],-->
+<!--                                });-->
+<!--                            }-->
+<!--                        });-->
+<!--                    } else {-->
+<!--                        this.$store.dispatch('Weibo/insertAccount', this.form).then(res => {-->
+<!--                            if (res.data && res.data['success']) {-->
+<!--                                this.dialogFormVisible = false;-->
+<!--                                this.$store.dispatch('Weibo/getAccountList');-->
+<!--                                this.$message({-->
+<!--                                    type: 'success',-->
+<!--                                    message: '提交成功!'-->
+<!--                                });-->
+<!--                            } else {-->
+<!--                                this.$message({-->
+<!--                                    type: 'error',-->
+<!--                                    message: '提交失败，' + res.data['msg'],-->
+<!--                                });-->
+<!--                            }-->
+<!--                        });-->
+<!--                    }-->
+<!--                }-->
+<!--            });-->
+<!--        },-->
+<!--        genPostParams(row) {-->
+<!--            var params = {-->
+<!--                'id':row['id'],-->
+<!--                'name':row['name'],-->
+<!--                'uid':row['uid'],-->
+<!--            };-->
+<!--            return params;-->
+<!--        }-->
+<!--      },-->
+<!--      data() {-->
+<!--        return {-->
+<!--            dialogFormVisible: false,-->
+<!--            form: {-->
+<!--              id: 0,-->
+<!--              name: '',-->
+<!--              uid: '',-->
+<!--            },-->
+<!--            formLabelWidth: '120px',-->
+<!--            rules: {-->
+<!--              name: [-->
+<!--                { required: true, message: '请输入名称', trigger: 'blur' },-->
+<!--              ],-->
+<!--              uid: [-->
+<!--                { required: true, message: '请输入uid', trigger: 'blur' },-->
+<!--              ],-->
+<!--            },-->
+<!--        }-->
+<!--      }-->
+<!--    });-->
 
-  </script>
+<!--  </script>-->

@@ -24,7 +24,24 @@ export default defineConfig({
   },
   server: {
     port: 3030,
+    proxy: {
+      '/proxyapi': {
+        target: 'http://jennycrawl2.jerehu.com',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/proxyapi/, '')
+      },
+    }
   },
+  // devServer: {
+  //   open: true,// vue项目启动时自动打开浏览器
+  //   proxy: {
+  //     '/api': {
+  //       target: 'http://jennycrawl2.jerehu.com/',
+  //       changeOrigin: true, //是否跨域
+  //       rewrite:path => path.replace(/^\/api/,'')
+  //     }
+  //   }
+  // },
   preview: {
     port: 8080,
   }
