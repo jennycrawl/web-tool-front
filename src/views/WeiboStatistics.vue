@@ -1,15 +1,17 @@
 <script setup>
 import {useWeiboStatisticsStore} from "@/stores/WeiboStore.js";
-import {onMounted,ref} from "vue";
+import {onMounted,ref,toRef} from "vue";
+
+const weiboStatisticsStore = useWeiboStatisticsStore()
 
 const accountList = ref([])
 const statisticsList = ref([])
+// const {statisticsList} = toRef(weiboStatisticsStore, 'statisticsList')
 const searchForm = ref({
   dateRange: '',
   accountId: '',
 })
 
-const weiboStatisticsStore = useWeiboStatisticsStore()
 onMounted(async () => {
   accountList.value = await weiboStatisticsStore.getAccountList()
   statisticsList.value = await weiboStatisticsStore.getStatisticsList()
@@ -19,11 +21,10 @@ const shortcuts = weiboStatisticsStore.getDatePickerOptions().shortcuts
 function dataPickerOnChange(dat){
   searchForm.dateRange.value = dat
 }
-const onSubmit = (searchForm) => {
+const onSubmit = async (searchForm) => {
   console.log(searchForm)
   weiboStatisticsStore.setSearchForm(searchForm)
-  weiboStatisticsStore.getStatisticsList()
-  // statisticsList.value = weiboStatisticsStore.statisticsList
+  statisticsList.value = await weiboStatisticsStore.getStatisticsList()
 }
 </script>
 <template>
