@@ -117,12 +117,8 @@ export const useWeiboStore = defineStore('weibo', {
             return this.statisticsList
         },
         setSearchForm(searchForm) {
-            if (searchForm.accountId) {
-                this.searchForm.accountId = searchForm.accountId;
-            }
-            if (searchForm.dateRange) {
-                this.searchForm.dateRange = searchForm.dateRange;
-            }
+            this.searchForm.accountId = searchForm.accountId;
+            this.searchForm.dateRange = searchForm.dateRange;
         },
     }
 

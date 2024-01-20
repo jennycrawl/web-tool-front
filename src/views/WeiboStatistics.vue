@@ -27,6 +27,7 @@ const onSubmit = async (searchForm) => {
 const onClear = async () => {
   searchForm.accountId = ''
   searchForm.dateRange = []
+  weiboStore.setSearchForm(searchForm)
   statisticsList.value = await weiboStore.getStatisticsList()
 }
 </script>
