@@ -1,30 +1,33 @@
 <script setup>
-import {useWeiboStatisticsStore} from "@/stores/WeiboStore.js";
-import {onMounted,ref,toRef} from "vue";
+import {useWeiboStore} from "@/stores/WeiboStore.js";
+import {onMounted,ref,reactive} from "vue";
 
-const weiboStatisticsStore = useWeiboStatisticsStore()
+const weiboStore = useWeiboStore()
 
 const accountList = ref([])
 const statisticsList = ref([])
-// const {statisticsList} = toRef(weiboStatisticsStore, 'statisticsList')
-const searchForm = ref({
-  dateRange: '',
+let searchForm = reactive({
   accountId: '',
+  dateRange: [],
 })
 
 onMounted(async () => {
-  accountList.value = await weiboStatisticsStore.getAccountList()
-  statisticsList.value = await weiboStatisticsStore.getStatisticsList()
+  accountList.value = await weiboStore.getAccountList()
+  statisticsList.value = await weiboStore.getStatisticsList()
 })
-// let searchForm = weiboStatisticsStore.getSearchForm(weiboStatisticsStore)
-const shortcuts = weiboStatisticsStore.getDatePickerOptions().shortcuts
+// let searchForm = weiboStore.getSearchForm(weiboStore)
+const shortcuts = weiboStore.datePickerOptions.shortcuts
 function dataPickerOnChange(dat){
   searchForm.dateRange.value = dat
 }
 const onSubmit = async (searchForm) => {
-  console.log(searchForm)
-  weiboStatisticsStore.setSearchForm(searchForm)
-  statisticsList.value = await weiboStatisticsStore.getStatisticsList()
+  weiboStore.setSearchForm(searchForm)
+  statisticsList.value = await weiboStore.getStatisticsList()
+}
+const onClear = async () => {
+  searchForm.accountId = ''
+  searchForm.dateRange = []
+  statisticsList.value = await weiboStore.getStatisticsList()
 }
 </script>
 <template>
@@ -48,26 +51,26 @@ const onSubmit = async (searchForm) => {
         range-separator="至"
         start-placeholder="开始日期"
         end-placeholder="结束日期"
-        value-format="yyyy-MM-dd"
-        :shortcuts="shortcuts"
-        @change="datePickerOnChange">
+        format="YYYY-MM-DD"
+        value-format="YYYY-MM-DD"
+        :shortcuts="shortcuts">
       </el-date-picker>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="onSubmit(searchForm)">查询</el-button>
     </el-form-item>
     <el-form-item>
-      <el-button type="warning" >清空<i class="el-icon-delete el-icon--right"></i></el-button>
+      <el-button type="warning" @click="onClear">清空<i class="el-icon-delete el-icon--right"></i></el-button>
     </el-form-item>
-<!--      <el-form-item>-->
-<!--        <download-excel-->
-<!--            class = "export-excel-wrapper"-->
-<!--            :data = "list"-->
-<!--            :fields = "excelFields"-->
-<!--            name = "weibo.xls">-->
-<!--            <el-button type="primary">导出<i class="el-icon-download el-icon&#45;&#45;right"></i></el-button>-->
-<!--        </download-excel>-->
-<!--      </el-form-item>-->
+      <el-form-item>
+        <download-excel
+            class = "export-excel-wrapper"
+            :data = "statisticsList"
+            :fields = "weiboStore.excelFields"
+            name = "weibo.xls">
+            <el-button type="primary">导出<i class="el-icon-download el-icon--right"></i></el-button>
+        </download-excel>
+      </el-form-item>
   </el-form>
     <el-table
       :data="statisticsList"

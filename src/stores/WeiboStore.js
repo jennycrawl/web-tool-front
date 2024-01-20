@@ -2,14 +2,14 @@ import {defineStore} from "pinia";
 import api from "@/api.js";
 // import weiboAccountList from "@/views/WeiboAccountList.vue";
 
-export const useWeiboStatisticsStore = defineStore('weiboStatisticsStoreId', {
+export const useWeiboStore = defineStore('weibo', {
     state: () => ({
         accountList: [],
         statisticsList: [],
         msgList: [],
         searchForm: {
-            dateRange: '',
             accountId: '',
+            dateRange: [],
         },
         datePickerOptions: {
             disabledDate(time) {
@@ -57,15 +57,23 @@ export const useWeiboStatisticsStore = defineStore('weiboStatisticsStoreId', {
                 }
             }]
         },
+        excelFields:{
+            '名称':'name',
+            '粉丝数':'fans',
+            '总微博数':'feed',
+            '微博数':'count',
+            '总转发数':'forward_sum',
+            '总评论数':'comment_sum',
+            '总点赞数':'like_sum',
+            '平均转发数':'forward_avg',
+            '平均评论数':'comment_avg',
+            '平均点赞数':'like_avg',
+            '最大转发数':'forward_max',
+            '最大评论数':'comment_max',
+            '最大点赞数':'like_max',
+            '抓取时间':'crawl_time',
+        },
     }),
-    getters: {
-        // accountId(state) {
-        //     return state.searchForm.accountId()
-        // },
-        // getAccountList(state) {
-        //     return state.accountList
-        // }
-    },
     actions: {
         accountList: Promise.resolve(undefined),
         statisticsList: Promise.resolve(undefined),
@@ -108,12 +116,6 @@ export const useWeiboStatisticsStore = defineStore('weiboStatisticsStoreId', {
             }
             return this.statisticsList
         },
-        getDatePickerOptions() {
-            return this.datePickerOptions
-        },
-        getSearchForm() {
-            return this.searchForm
-        },
         setSearchForm(searchForm) {
             if (searchForm.accountId) {
                 this.searchForm.accountId = searchForm.accountId;
@@ -121,15 +123,7 @@ export const useWeiboStatisticsStore = defineStore('weiboStatisticsStoreId', {
             if (searchForm.dateRange) {
                 this.searchForm.dateRange = searchForm.dateRange;
             }
-            // if (this.searchForm.dateRange instanceof Array) {
-            //     if (this.searchForm.dateRange[0]) {
-            //         params.start_date = this.searchForm.dateRange[0]
-            //     }
-            //     if (this.searchForm.dateRange[1]) {
-            //         params.end_date = this.searchForm.dateRange[1]
-            //     }
-            // }
-        }
+        },
     }
 
 })
