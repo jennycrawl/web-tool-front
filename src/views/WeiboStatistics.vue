@@ -27,6 +27,7 @@ const onClear = async () => {
 }
 </script>
 <template>
+  <el-main>
   <el-form :inline="true" :model="searchForm" class="demo-form-inline" >
     <el-form-item label="名称" prop="accountId">
       <el-select v-model="searchForm.accountId" filterable placeholder="请选择">
@@ -154,4 +155,5 @@ const onClear = async () => {
         sortable>
       </el-table-column>
     </el-table>
+  </el-main>
 </template>
