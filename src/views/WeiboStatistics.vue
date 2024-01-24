@@ -17,9 +17,6 @@ onMounted(async () => {
 })
 // let searchForm = weiboStore.getSearchForm(weiboStore)
 const shortcuts = weiboStore.datePickerOptions.shortcuts
-function dataPickerOnChange(dat){
-  searchForm.dateRange.value = dat
-}
 const onSubmit = async (searchForm) => {
   weiboStore.setSearchForm(searchForm)
   statisticsList.value = await weiboStore.getStatisticsList()

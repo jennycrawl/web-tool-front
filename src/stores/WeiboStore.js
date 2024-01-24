@@ -83,7 +83,6 @@ export const useWeiboStore = defineStore('weibo', {
         async getAccountList(params = {}) {
             try {
                 const res = await api.getWeiboAccountList(params)
-                console.log(res.data.msg)
                 if (res.data.success && res.data.msg) {
                     this.accountList = res.data.msg
                 }
@@ -107,7 +106,6 @@ export const useWeiboStore = defineStore('weibo', {
                     }
                 }
                 const res = await api.getWeiboStatisticsList(params)
-                console.log(res.data.msg)
                 if (res.data.success && res.data.msg) {
                     this.statisticsList = res.data.msg
                 }
