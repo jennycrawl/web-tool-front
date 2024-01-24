@@ -1,3 +1,52 @@
+<script setup>
+import {useWeiboStore} from "@/stores/WeiboStore.js";
+import {onMounted,ref,reactive} from "vue";
+
+const weiboStore = useWeiboStore()
+
+const table = ref(null);
+const accountList = ref([])
+const msgList = ref([])
+let searchForm = reactive({
+  dateRange: '',
+  accountId: '',
+  page: '',
+  sortProp: '',
+  sortOrder: '',
+})
+
+onMounted(async () => {
+  accountList.value = await weiboStore.getAccountList()
+  msgList.value = await weiboStore.getMsgList(searchForm)
+})
+// let searchForm = weiboStore.getSearchForm(weiboStore)
+const shortcuts = weiboStore.datePickerOptions.shortcuts
+const onSubmit = async (searchForm) => {
+  msgList.value = await weiboStore.getMsgList(searchForm)
+}
+const onClear = async (table) => {
+  searchForm.accountId = ''
+  searchForm.dateRange = []
+  searchForm.page = ''
+  searchForm.sortProp = ''
+  searchForm.sortOrder = ''
+  msgList.value = await weiboStore.getMsgList(searchForm)
+  table.clearSort();
+}
+const onCurrentPageChange = async(page) => {
+  searchForm.page = page;
+  msgList.value = await weiboStore.getMsgList(searchForm)
+}
+const onSortChange = async ({prop, order }) => {
+  searchForm.sortProp = prop;
+  if (order === 'descending') {
+    searchForm.sortOrder = 'desc';
+  } else if (order === 'ascending') {
+    searchForm.sortOrder = 'asc';
+  }
+  msgList.value = await weiboStore.getMsgList(searchForm)
+}
+</script>
 <template>
   <el-main>
     <el-form :inline="true" :model="searchForm" class="demo-form-inline" ref="refname">
@@ -20,19 +69,20 @@
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
-          value-format="yyyy-MM-dd"
-          :picker-options="pickerOptions1">
+          format="YYYY-MM-DD"
+          value-format="YYYY-MM-DD"
+          :shortcuts="shortcuts">
         </el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">查询</el-button>
+        <el-button type="primary" @click="onSubmit(searchForm)">查询</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="warning" @click="onClear('refname')">清空<i class="el-icon-delete el-icon--right"></i></el-button>
+        <el-button type="warning" @click="onClear(table)">清空<i class="el-icon-delete el-icon--right"></i></el-button>
       </el-form-item>
     </el-form>
     <el-table
-      :data="list.msg_list"
+      :data="msgList.msg_list"
       fixed="left"
       style="width: 100%"
       @sort-change="onSortChange"
@@ -52,10 +102,8 @@
         label="url"
         min-width="240"
         >
-        <template slot-scope="scope">
-            <a :href="scope.row.url"
-                target="_blank" class="buttonText">{{scope.row.url}}
-            </a>
+        <template #default="scope">
+          <a :href="scope.row.url" target="_blank">{{ scope.row.url }}</a>
         </template>
       </el-table-column>
       <el-table-column
@@ -88,142 +136,9 @@
       background
       layout="total, prev, pager, next, jumper"
       @current-change="onCurrentPageChange"
-      :current-page.sync="list.current_page"
+      :current-page.sync="msgList.current_page"
       :page-size="20"
-      :total="list.total">
+      :total="msgList.total">
     </el-pagination>
   </el-main>
 </template>
-
-  <script>
-    import { mapState, mapActions } from 'vuex';
-    export default({
-      data() {
-        return {
-            searchForm: {
-                dateRange: '',
-                accountId: '',
-                page: '',
-                sortProp: '',
-                sortOrder: '',
-            },
-            pickerOptions1: {
-              disabledDate(time) {
-                return time.getTime() > Date.now();
-              },
-              shortcuts: [{
-                text: '最近一周',
-                onClick(picker) {
-                  const end = new Date();
-                  const start = new Date();
-                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                  picker.$emit('pick', [start, end]);
-                }
-              }, {
-                text: '最近一个月',
-                onClick(picker) {
-                  const end = new Date();
-                  const start = new Date();
-                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                  picker.$emit('pick', [start, end]);
-                }
-              }, {
-                text: '最近三个月',
-                onClick(picker) {
-                  const end = new Date();
-                  const start = new Date();
-                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                  picker.$emit('pick', [start, end]);
-                }
-              }, {
-                text: '最近半年',
-                onClick(picker) {
-                  const end = new Date();
-                  const start = new Date();
-                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 180);
-                  picker.$emit('pick', [start, end]);
-                }
-              }, {
-                text: '最近一年',
-                onClick(picker) {
-                  const end = new Date();
-                  const start = new Date();
-                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 365);
-                  picker.$emit('pick', [start, end]);
-                }
-              }]
-            },
-        }
-      },
-      computed: mapState({
-        list: state => state.Weibo.msgList,
-        accountList: state => state.Weibo.accountList,
-      }),
-      created() {
-        this.$store.dispatch('Weibo/getMsgList');
-        this.$store.dispatch('Weibo/getAccountList');
-      },
-      methods: {
-        ...mapActions([
-            'Weibo/getMsgList',
-            'Weibo/getAccountList',
-        ]),
-        onSubmit() {
-           var params = {};
-           if (this.searchForm.accountId) {
-               params.account_id = this.searchForm.accountId;
-           }
-           if (this.searchForm.dateRange instanceof Array) {
-               if (this.searchForm.dateRange[0]) {
-                   params.start_date = this.searchForm.dateRange[0]
-               }
-               if (this.searchForm.dateRange[1]) {
-                   params.end_date = this.searchForm.dateRange[1]
-               }
-           }
-           this.$store.dispatch('Weibo/getMsgList', params);
-        },
-        onClear(refname) {
-            this.$refs[refname].resetFields();
-            this.$store.dispatch('Weibo/getMsgList', {});
-            this.$refs['table'].clearSort();
-        },
-        onCurrentPageChange(val) {
-            this.searchForm.page = val;
-            this.$store.dispatch('Weibo/getMsgList', this.genFormParams());
-        },
-        onSortChange(column) {
-            this.searchForm.sortProp = column.prop;
-            if (column.order == 'descending') {
-                this.searchForm.sortOrder = 'desc';
-            } else if (column.order == 'ascending') {
-                this.searchForm.sortOrder = 'asc';
-            }
-            this.$store.dispatch('Weibo/getMsgList', this.genFormParams());
-        },
-        genFormParams() {
-           var params = {};
-           if (this.searchForm.accountId) {
-               params.account_id = this.searchForm.accountId;
-           }
-           if (this.searchForm.dateRange instanceof Array) {
-               if (this.searchForm.dateRange[0]) {
-                   params.start_date = this.searchForm.dateRange[0]
-               }
-               if (this.searchForm.dateRange[1]) {
-                   params.end_date = this.searchForm.dateRange[1]
-               }
-           }
-           if (this.searchForm.page) {
-                params.page = this.searchForm.page;
-           }
-           if (this.searchForm.sortProp && this.searchForm.sortOrder) {
-                params.sort_field = this.searchForm.sortProp;
-                params.sort_order = this.searchForm.sortOrder;
-           }
-           return params;
-        },
-      },
-    });
-
-  </script>

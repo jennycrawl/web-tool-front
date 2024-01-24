@@ -13,19 +13,17 @@ let searchForm = reactive({
 
 onMounted(async () => {
   accountList.value = await weiboStore.getAccountList()
-  statisticsList.value = await weiboStore.getStatisticsList()
+  statisticsList.value = await weiboStore.getStatisticsList(searchForm)
 })
 // let searchForm = weiboStore.getSearchForm(weiboStore)
 const shortcuts = weiboStore.datePickerOptions.shortcuts
 const onSubmit = async (searchForm) => {
-  weiboStore.setSearchForm(searchForm)
-  statisticsList.value = await weiboStore.getStatisticsList()
+  statisticsList.value = await weiboStore.getStatisticsList(searchForm)
 }
 const onClear = async () => {
   searchForm.accountId = ''
   searchForm.dateRange = []
-  weiboStore.setSearchForm(searchForm)
-  statisticsList.value = await weiboStore.getStatisticsList()
+  statisticsList.value = await weiboStore.getStatisticsList(searchForm)
 }
 </script>
 <template>

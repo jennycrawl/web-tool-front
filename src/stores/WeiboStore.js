@@ -77,6 +77,7 @@ export const useWeiboStore = defineStore('weibo', {
     actions: {
         accountList: Promise.resolve(undefined),
         statisticsList: Promise.resolve(undefined),
+        msgList: Promise.resolve(undefined),
         searchForm: undefined,
 
 
@@ -91,18 +92,18 @@ export const useWeiboStore = defineStore('weibo', {
             }
             return this.accountList
         },
-        async getStatisticsList() {
+        async getStatisticsList(searchForm) {
             try {
                 let params = {}
-                if (this.searchForm.accountId) {
-                    params.account_id = this.searchForm.accountId;
+                if (searchForm.accountId) {
+                    params.account_id = searchForm.accountId;
                 }
-                if (this.searchForm.dateRange instanceof Array) {
-                    if (this.searchForm.dateRange[0]) {
-                        params.start_date = this.searchForm.dateRange[0]
+                if (searchForm.dateRange instanceof Array) {
+                    if (searchForm.dateRange[0]) {
+                        params.start_date = searchForm.dateRange[0]
                     }
-                    if (this.searchForm.dateRange[1]) {
-                        params.end_date = this.searchForm.dateRange[1]
+                    if (searchForm.dateRange[1]) {
+                        params.end_date = searchForm.dateRange[1]
                     }
                 }
                 const res = await api.getWeiboStatisticsList(params)
@@ -114,10 +115,35 @@ export const useWeiboStore = defineStore('weibo', {
             }
             return this.statisticsList
         },
-        setSearchForm(searchForm) {
-            this.searchForm.accountId = searchForm.accountId;
-            this.searchForm.dateRange = searchForm.dateRange;
+        async getMsgList(searchForm) {
+            try {
+                let params = {}
+                if (searchForm.accountId) {
+                    params.account_id = searchForm.accountId;
+                }
+                if (searchForm.dateRange instanceof Array) {
+                    if (searchForm.dateRange[0]) {
+                        params.start_date = searchForm.dateRange[0]
+                    }
+                    if (searchForm.dateRange[1]) {
+                        params.end_date = searchForm.dateRange[1]
+                    }
+                }
+                if (searchForm.page) {
+                    params.page = searchForm.page;
+                }
+                if (searchForm.sortProp && searchForm.sortOrder) {
+                    params.sort_field = searchForm.sortProp;
+                    params.sort_order = searchForm.sortOrder;
+                }
+                const res = await api.getWeiboMsgList(params)
+                if (res.data.success && res.data.msg) {
+                    this.msgList = res.data.msg
+                }
+            } catch (error) {
+                console.log(error)
+            }
+            return this.msgList
         },
     }
-
 })

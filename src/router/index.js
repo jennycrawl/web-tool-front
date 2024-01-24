@@ -21,6 +21,11 @@ const router = createRouter({
       path: '/weibo/statistics',
       name: 'weiboStatistics',
       component: () => import('../views/WeiboStatistics.vue')
+    },
+    {
+      path: '/weibo/msg',
+      name: 'weiboMsg',
+      component: () => import('../views/WeiboMsg.vue')
     }
   ]
 })
