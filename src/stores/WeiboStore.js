@@ -1,6 +1,5 @@
 import {defineStore} from "pinia";
 import api from "@/api.js";
-// import weiboAccountList from "@/views/WeiboAccountList.vue";
 
 export const useWeiboStore = defineStore('weibo', {
     state: () => ({
@@ -87,6 +86,24 @@ export const useWeiboStore = defineStore('weibo', {
                 if (res.data.success && res.data.msg) {
                     this.accountList = res.data.msg
                 }
+            } catch (error) {
+                console.log(error)
+            }
+            return this.accountList
+        },
+        async insertAccount(params = {}) {
+            try {
+                const res = await api.insertWeiboAccount(params)
+                return res
+            } catch (error) {
+                console.log(error)
+            }
+            return this.accountList
+        },
+        async deleteAccount(id, params = {}) {
+            try {
+                const res = await api.deleteWeiboAccount(id, params)
+                return res
             } catch (error) {
                 console.log(error)
             }
