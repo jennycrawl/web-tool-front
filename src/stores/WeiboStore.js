@@ -93,21 +93,27 @@ export const useWeiboStore = defineStore('weibo', {
         },
         async insertAccount(params = {}) {
             try {
-                const res = await api.insertWeiboAccount(params)
-                return res
+                return await api.insertWeiboAccount(params)
             } catch (error) {
                 console.log(error)
             }
-            return this.accountList
+            return null
         },
         async deleteAccount(id, params = {}) {
             try {
-                const res = await api.deleteWeiboAccount(id, params)
-                return res
+                return await api.deleteWeiboAccount(id, params)
             } catch (error) {
                 console.log(error)
             }
-            return this.accountList
+            return null
+        },
+        async updateAccount(id, params) {
+            try {
+                return await api.updateWeiboAccount(id, params)
+            } catch (error) {
+                console.log(error)
+            }
+            return null
         },
         async getStatisticsList(searchForm) {
             try {
