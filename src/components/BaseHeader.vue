@@ -16,7 +16,3 @@
     </el-sub-menu>
     </el-menu>
 </template>
-
-<style scoped>
-
-</style>

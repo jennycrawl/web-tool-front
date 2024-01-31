@@ -1,6 +1,6 @@
 <script setup>
 import {useWeiboStore} from "@/stores/WeiboStore.js";
-import {onMounted,ref,reactive} from "vue";
+import {onMounted,ref} from "vue";
 
 const weiboStore = useWeiboStore()
 
@@ -113,10 +113,9 @@ const handleDelete = async (index, row) => {
 
 </script>
 <template>
-  <el-main>
     <el-button
       type="primary"
-      size="small" @click="handleInsert">添加微博号<i class="el-icon-plus el-icon--right"></i></el-button>
+      size="small" @click="handleInsert">添加微博号&nbsp;<el-icon><Plus /></el-icon></el-button>
     <el-table
       :data="accountList"
       style="width: 100%">
@@ -169,6 +168,4 @@ const handleDelete = async (index, row) => {
       </div>
       </template>
     </el-dialog>
-
-  </el-main>
 </template>
