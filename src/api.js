@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-axios.defaults.baseURL = '/proxyapi';
+axios.defaults.baseURL = import.meta.env.VITE_AXIOS_DEFAULTS_BASEURL
+// console.log(import.meta.env.VITE_AXIOS_DEFAULTS_BASEURL, axios.defaults.baseURL)
 export default {
   // 列表接口
   getWechatAccountList: function (params) {
@@ -29,26 +30,26 @@ export default {
   },
 
   getWeiboAccountList: function (params) {
-    return axios.get('api/weibo/account/list', {
+    return axios.get('weibo/account/list', {
       params: params
     })
   },
   insertWeiboAccount: function (params) {
-    return axios.post('api/weibo/account', params);
+    return axios.post('weibo/account', params);
   },
   updateWeiboAccount: function (id, params) {
-    return axios.put('api/weibo/account/' + id, params);
+    return axios.put('weibo/account/' + id, params);
   },
   deleteWeiboAccount: function (id, params) {
-    return axios.delete('api/weibo/account/' + id, params);
+    return axios.delete('weibo/account/' + id, params);
   },
   getWeiboStatisticsList: function (params) {
-    return axios.get('api/weibo/statistics', {
+    return axios.get('weibo/statistics', {
       params: params
     })
   },
   getWeiboMsgList: function (params) {
-    return axios.get('api/weibo/msg', {
+    return axios.get('weibo/msg', {
       params: params
     })
   },
