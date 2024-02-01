@@ -42,5 +42,8 @@ export default defineConfig({
         rewrite: path => path.replace(/^\/proxyapi/, '')
       },
     }
-  }
+  },
+  build: {
+    chunkSizeWarningLimit: 1600,
+  },
 })
