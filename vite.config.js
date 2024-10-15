@@ -39,7 +39,7 @@ export default defineConfig({
       '/api': {
         target: 'https://jennycrawl.jerehu.com',
         changeOrigin: true,
-        rewrite: path => path.replace(/^\/api/, '/goapi')
+        // rewrite: path => path.replace(/^\/api/, '')
       },
     }
   },
