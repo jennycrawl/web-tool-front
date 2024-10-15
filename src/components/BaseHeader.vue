@@ -9,10 +9,10 @@
       <el-menu-item index="/weibo/statistics">统计结果</el-menu-item>
       <el-menu-item index="/weibo/msg">详细数据</el-menu-item>
     </el-sub-menu>
-    <el-sub-menu index="2">
-      <template #title>微信</template>
-      <el-menu-item index="/wechat/statistics">统计结果</el-menu-item>
-      <el-menu-item index="/wechat/msg">详细数据</el-menu-item>
-    </el-sub-menu>
+<!--    <el-sub-menu index="2">-->
+<!--      <template #title>微信</template>-->
+<!--      <el-menu-item index="/wechat/statistics">统计结果</el-menu-item>-->
+<!--      <el-menu-item index="/wechat/msg">详细数据</el-menu-item>-->
+<!--    </el-sub-menu>-->
     </el-menu>
 </template>

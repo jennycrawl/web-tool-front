@@ -26,10 +26,10 @@ export default defineConfig({
   server: {
     port: 3030,
     proxy: {
-      '/proxyapi': {
-        target: 'http://jennycrawl2.jerehu.com',
+      '/api': {
+        target: 'http://localhost:8000',
         changeOrigin: true,
-        rewrite: path => path.replace(/^\/proxyapi/, '')
+        rewrite: path => path.replace(/^\/api/, '')
       },
     }
   },
@@ -37,9 +37,9 @@ export default defineConfig({
     port: 8080,
     proxy: {
       '/api': {
-        target: 'http://jennycrawl.jerehu.com',
+        target: 'https://jennycrawl.jerehu.com',
         changeOrigin: true,
-        rewrite: path => path.replace(/^\/proxyapi/, '')
+        rewrite: path => path.replace(/^\/api/, '/goapi')
       },
     }
   },

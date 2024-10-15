@@ -45,7 +45,7 @@ const handelPushForm = async () => {
   if (form.value.id) {
     //update
     const res = await weiboStore.updateAccount(form.value.id, form.value)
-    if (res && res.data.success && res.data.msg) {
+    if (res && res.data.code === 0 && res.data.message) {
       ElMessage({
         showClose: true,
         message: '提交成功!',
@@ -56,14 +56,14 @@ const handelPushForm = async () => {
     } else {
       ElMessage({
         showClose: true,
-        message: '提交失败，' + res.data.msg,
+        message: '提交失败，' + res.data.message,
         type: 'error',
       });
     }
   } else {
     //insert
     const res = await weiboStore.insertAccount(form.value)
-    if (res && res.data.success && res.data.msg) {
+    if (res && res.data.code === 0 && res.data.message) {
       ElMessage({
         showClose: true,
         message: '提交成功!',
@@ -74,7 +74,7 @@ const handelPushForm = async () => {
     } else {
       ElMessage({
         showClose: true,
-        message: '提交失败，' + res.data.msg,
+        message: '提交失败，' + res.data.message,
         type: 'error',
       });
     }
@@ -88,7 +88,7 @@ const handleDelete = async (index, row) => {
     type: 'warning'
   }).then(async () => {
     const res = await weiboStore.deleteAccount(row.id, {})
-    if (res.data.success && res.data.msg) {
+    if (res.data.code === 0 && res.data.message) {
       ElMessage({
         showClose: true,
         message: '删除成功!',
@@ -98,7 +98,7 @@ const handleDelete = async (index, row) => {
     } else {
       ElMessage({
         showClose: true,
-        message: '删除失败，' + res.data.msg,
+        message: '删除失败，' + res.data.message,
         type: 'error',
       });
     }

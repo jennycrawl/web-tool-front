@@ -72,7 +72,7 @@
               type: 'warning'
             }).then(() => {
                 this.$store.dispatch('Wechat/deleteAccount', {'id':row['id'], 'params':{}}).then(res => {
-                    if (res.data && res.data['success']) {
+                    if (res.data && res.data['code'] === 0) {
                         this.dialogFormVisible = false;
                         this.$store.dispatch('Wechat/getAccountList');
                         this.$message({
@@ -82,7 +82,7 @@
                     } else {
                         this.$message({
                             type: 'error',
-                            message: '删除失败，' + res.data['msg'],
+                            message: '删除失败，' + res.data['message'],
                         });
                     }
                 });
@@ -108,7 +108,7 @@
                 } else {
                     if (this.form['id']) {
                         this.$store.dispatch('Wechat/updateAccount', {'id':this.form['id'], 'params':this.form}).then(res => {
-                            if (res.data && res.data['success']) {
+                            if (res.data && res.data['code'] === 0) {
                                 this.dialogFormVisible = false;
                                 this.$store.dispatch('Wechat/getAccountList');
                                 this.$message({
@@ -118,13 +118,13 @@
                             } else {
                                 this.$message({
                                     type: 'error',
-                                    message: '提交失败，' + res.data['msg'],
+                                    message: '提交失败，' + res.data['message'],
                                 });
                             }
                         });
                     } else {
                         this.$store.dispatch('Wechat/insertAccount', this.form).then(res => {
-                            if (res.data && res.data['success']) {
+                            if (res.data && res.data['code'] === 0) {
                                 this.dialogFormVisible = false;
                                 this.$store.dispatch('Wechat/getAccountList');
                                 this.$message({
@@ -134,7 +134,7 @@
                             } else {
                                 this.$message({
                                     type: 'error',
-                                    message: '提交失败，' + res.data['msg'],
+                                    message: '提交失败，' + res.data['message'],
                                 });
                             }
                         });

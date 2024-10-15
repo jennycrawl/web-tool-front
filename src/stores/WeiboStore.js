@@ -83,8 +83,8 @@ export const useWeiboStore = defineStore('weibo', {
         async getAccountList(params = {}) {
             try {
                 const res = await api.getWeiboAccountList(params)
-                if (res.data.success && res.data.msg) {
-                    this.accountList = res.data.msg
+                if (res.data.code === 0 && res.data.data) {
+                    this.accountList = res.data.data
                 }
             } catch (error) {
                 console.log(error)
@@ -130,8 +130,8 @@ export const useWeiboStore = defineStore('weibo', {
                     }
                 }
                 const res = await api.getWeiboStatisticsList(params)
-                if (res.data.success && res.data.msg) {
-                    this.statisticsList = res.data.msg
+                if (res.data.code === 0 && res.data.data) {
+                    this.statisticsList = res.data.data
                 }
             } catch (error) {
                 console.log(error)
@@ -160,8 +160,8 @@ export const useWeiboStore = defineStore('weibo', {
                     params.sort_order = searchForm.sortOrder;
                 }
                 const res = await api.getWeiboMsgList(params)
-                if (res.data.success && res.data.msg) {
-                    this.msgList = res.data.msg
+                if (res.data.code === 0 && res.data.data) {
+                    this.msgList = res.data.data
                 }
             } catch (error) {
                 console.log(error)
