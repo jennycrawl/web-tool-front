@@ -25,6 +25,28 @@ const onClear = async () => {
   searchForm.dateRange = []
   statisticsList.value = await weiboStore.getStatisticsList(searchForm)
 }
+
+function sortForwardSum(row1, row2) {
+  return sortWeiboStatisticsObject(row1, row2, "forward_sum")
+}
+function sortCommentSum(row1, row2) {
+  return sortWeiboStatisticsObject(row1, row2, "comment_sum")
+}
+function sortLikeSum(row1, row2) {
+  return sortWeiboStatisticsObject(row1, row2, "like_sum")
+}
+function sortForwardAvg(row1, row2) {
+  return sortWeiboStatisticsObject(row1, row2, "forward_avg")
+}
+function sortCommentAvg(row1, row2) {
+  return sortWeiboStatisticsObject(row1, row2, "comment_avg")
+}
+function sortLikeAvg(row1, row2) {
+  return sortWeiboStatisticsObject(row1, row2, "like_avg")
+}
+function sortWeiboStatisticsObject(row1, row2, fieldName) {
+  return Number(row1[fieldName]) - Number(row2[fieldName])
+}
 </script>
 <template>
   <el-form :inline="true" :model="searchForm" class="demo-form-inline" >
@@ -105,32 +127,38 @@ const onClear = async () => {
       <el-table-column
         prop="forward_sum"
         label="总转发数"
-        sortable>
+        sortable
+        :sort-method="sortForwardSum">
       </el-table-column>
       <el-table-column
         prop="comment_sum"
         label="总评论数"
-        sortable>
+        sortable
+        :sort-method="sortCommentSum">
       </el-table-column>
       <el-table-column
         prop="like_sum"
         label="总点赞数"
-        sortable>
+        sortable
+        :sort-method="sortLikeSum">
       </el-table-column>
       <el-table-column
         prop="forward_avg"
         label="平均转发数"
-        sortable>
+        sortable
+        :sort-method="sortForwardAvg">
       </el-table-column>
       <el-table-column
         prop="comment_avg"
         label="平均评论数"
-        sortable>
+        sortable
+        :sort-method="sortCommentAvg">
       </el-table-column>
       <el-table-column
         prop="like_avg"
         label="平均点赞数"
-        sortable>
+        sortable
+        :sort-method="sortLikeAvg">
       </el-table-column>
       <el-table-column
         prop="forward_max"
