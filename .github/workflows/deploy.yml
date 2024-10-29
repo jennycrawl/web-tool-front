@@ -33,4 +33,4 @@ jobs:
         run: |
           echo "$KEY" > key.pem
           chmod 600 key.pem
-          rsync -avz -e "ssh -i key.pem" ./dist/ $USER@$HOST:TARGET  # 修改目标路径
+          rsync -avz -e "ssh -i key.pem" ./dist/ $USER@$HOST:$TARGET  # 修改目标路径
