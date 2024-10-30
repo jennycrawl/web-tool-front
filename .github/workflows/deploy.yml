@@ -24,7 +24,7 @@ jobs:
       - name: Generate .env.production from .env.template
         run: |
           cp .env.template .env.production
-          sed -i 's|11111|'"${{ secrets.VITE_AXIOS_DEFAULTS_BASEURL }}"'|g' .env.production
+          sed -i 's|/myapi|'"${{ secrets.VITE_AXIOS_DEFAULTS_BASEURL }}"'|g' .env.production
 
       - name: Build
         run: npm run build
