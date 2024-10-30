@@ -24,12 +24,12 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Deploy to Server
+      - name: Deploy
         env:
           HOST: ${{ secrets.DEPLOY_HOST }}
           USER: ${{ secrets.DEPLOY_USER }}
           KEY: ${{ secrets.DEPLOY_KEY }}
-          TARGET: ${{ secrets.TARGET }}
+          TARGET: ${{ secrets.DEPLOY_TARGET }}
         run: |
           echo "$KEY" > key.pem
           chmod 600 key.pem
