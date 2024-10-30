@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:  # 支持手动触发
 
 jobs:
   deploy:
@@ -24,7 +25,7 @@ jobs:
       - name: Generate .env.production from .env.template
         run: |
           cp .env.template .env.production
-          sed -i 's|/myapi|'"${{ secrets.VITE_AXIOS_DEFAULTS_BASEURL }}"'|g' .env.production
+          sed -i 's|/myapi|'"${{ vars.VITE_AXIOS_DEFAULTS_BASEURL }}"'|g' .env.production
 
       - name: Build
         run: npm run build
